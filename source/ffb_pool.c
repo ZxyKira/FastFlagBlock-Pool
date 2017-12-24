@@ -139,7 +139,7 @@ FFB_Pool_ID FFB_POOL_Init(void *pBuffer,	uint32_t bufferSize,	uint32_t blockSize
 /*----------------------------------------------------------------------------
    FFB_POOL_GetUseCount
 *----------------------------------------------------------------------------*/
-uint16_t	FFB_POOL_GetUseCount(FFB_Pool_ID poolID){
+uint16_t FFB_POOL_GetUseCount(FFB_Pool_ID poolID){
 	FFB_POOL_Foolproof(0);
 	return ((ffb_info_t*)poolID)->Block.Count.flagUse;
 }
@@ -147,7 +147,7 @@ uint16_t	FFB_POOL_GetUseCount(FFB_Pool_ID poolID){
 /*----------------------------------------------------------------------------
    FFB_POOL_GetFreeCount
 *----------------------------------------------------------------------------*/
-uint16_t	FFB_POOL_GetFreeCount(FFB_Pool_ID poolID){
+uint16_t FFB_POOL_GetFreeCount(FFB_Pool_ID poolID){
 	FFB_POOL_Foolproof(0);
 	return (((ffb_info_t*)poolID)->Block.Count.flagTotal.value - 
 					((ffb_info_t*)poolID)->Block.Count.flagUse);
@@ -156,7 +156,7 @@ uint16_t	FFB_POOL_GetFreeCount(FFB_Pool_ID poolID){
 /*----------------------------------------------------------------------------
    FFB_POOL_GetTotalCount
 *----------------------------------------------------------------------------*/
-uint16_t	FFB_POOL_GetTotalCount(FFB_Pool_ID poolID){
+uint16_t FFB_POOL_GetTotalCount(FFB_Pool_ID poolID){
 	FFB_POOL_Foolproof(0);
 	return ((ffb_info_t*)poolID)->Block.Count.flagTotal.value;
 }

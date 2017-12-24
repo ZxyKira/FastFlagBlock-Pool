@@ -9,10 +9,10 @@
 #define H_FFB_POOL_API 
 #include "stdint.h"
 
-typedef void* FFB_Pool_ID;
-/*
+typedef void* FastFlagBlock_Pool_ID;
+
 #define FFB_Pool_ID FastFlagBlock_Pool_ID
-*/
+
 typedef enum{
 	ffbOK,
 	ffbReload,

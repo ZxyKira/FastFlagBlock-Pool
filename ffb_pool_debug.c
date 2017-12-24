@@ -11,15 +11,40 @@
 #include "stdio.h"
 #include "stdlib.h"
 #include "ffb_pool_debug.h"
+#include "time.h"
+#include "string.h"
+#include <windows.h>
+#include <Mmsystem.h>
 
 
-ffb_info_t *info_debug = 0x00000000;
 
-void MGMGR_DebugInit(void* addr){
-	info_debug = (ffb_info_t*)addr;
+
+
+/*****************************************************************************
+ * Private functions
+ ****************************************************************************/
+ 
+ /*----------------------------------------------------------------------------
+   UI Function
+*----------------------------------------------------------------------------*/
+static void gotoxy(int x, int y)
+{
+    static HANDLE h = NULL;  
+    if(!h)
+        h = GetStdHandle(STD_OUTPUT_HANDLE);
+    COORD c = { x, y };  
+    SetConsoleCursorPosition(h,c);
 }
 
-void MGMGR_ValueShow(void){
+static void cls(void){
+	gotoxy(0,0);
+}
+
+/*****************************************************************************
+ * Public functions
+ ****************************************************************************/
+void FFB_DEBUG_ValueShow(FFB_Pool_ID PoolID ,bool ShowFlag){
+	ffb_info_t *info_debug = (ffb_info_t*)PoolID;
 	printf("\n");
 	printu();
 	printf("isBusy                        =");
@@ -54,19 +79,97 @@ void MGMGR_ValueShow(void){
 	printv(info_debug->Block.Count.lastFlag.S.flag);
 	printf("Block.Count.lastFlag.S.block  =");
 	printv(info_debug->Block.Count.lastFlag.S.block);
-	/*
-	int forMax = ((info_debug->Block.Count.blockTotal+3) / 4);
-	for(int i=0; i<forMax ; i++){
-		char tmp[16];
-		for(int j=0; j<4; j++){
-			if((forMax*j)+i<info_debug->Block.Count.blockTotal){
-				itoa(info_debug->Block.pFlagBlock[(forMax*j)+i], tmp, 2);
-				printf("FlagBlock[%02d] = %08s\t",(forMax*j)+i ,tmp);	
+	
+	if(ShowFlag){
+		int forMax = ((info_debug->Block.Count.blockTotal+3) / 4);
+		for(int i=0; i<forMax ; i++){
+			char tmp[16];
+			for(int j=0; j<4; j++){
+				if((forMax*j)+i<info_debug->Block.Count.blockTotal){
+					itoa(info_debug->Block.pFlagBlock[(forMax*j)+i], tmp, 2);
+					printf("FlagBlock[%02d] = %08s\t",(forMax*j)+i ,tmp);	
+				}
 			}
-		}
-		printf("\n");
-	}	
-	*/
+			printf("\n");
+		}			
+	}
+
 	printu();
 } 
+
+
+
+void FFB_DEBUG_LoopTest(FFB_Pool_ID PoolID, uint32_t loopQuantity, uint32_t blockCount){
+//system("mode con cols=130 lines=55");
+	system("mode con cols=60 lines=30");
+	void* ptr[blockCount];
+	uint16_t randomNumb[loopQuantity];	
+	printv(sizeof(ffb_info_t));
+	memset(&ptr, 0x00, sizeof(ptr));
+
+	
+	
+	uint16_t randomMax = FFB_POOL_API.GetFreeCount(PoolID);
+	LARGE_INTEGER nFreq;
+  LARGE_INTEGER nBeginTime;
+  LARGE_INTEGER nEndTime;
+  double time;
+
+	/*
+	for(int x=0; x<(randomMax*0.2); x++){
+		ptr[x] = FFB_POOL_API.Alloc();
+	}
+	
+	for(int x=0; x<(randomMax*0.73); x++){
+		FFB_POOL_API.Alloc();
+	}
+	/**/
+	
+
+	FFB_DEBUG_ValueShow(PoolID, false);
+	system("pause");
+	system("cls");
+	
+	uint32_t count_Alloc,	count_Free, count_Error;
+	while(1){
+		count_Alloc = 0;
+		count_Free 	= 0;
+		count_Error = 0;
+		for(int x=0; x<loopQuantity; x++)
+			randomNumb[x] =	(rand()%randomMax);
+			
+		QueryPerformanceFrequency(&nFreq);
+		QueryPerformanceCounter(&nBeginTime);
+		 
+		for(int x=0; x<loopQuantity; x++){
+			if(ptr[randomNumb[x]] == 0){ 
+				ptr[randomNumb[x]] = FFB_POOL_API.Alloc(PoolID);
+				(ptr[randomNumb[x]] != 0)?count_Alloc+=1:count_Error+=1;
+				
+			}
+			else{
+				FFB_POOL_API.Free(PoolID, ptr[randomNumb[x]]);
+				ptr[randomNumb[x]] = 0;
+				count_Free+=1;
+			}
+		}
+		
+		QueryPerformanceCounter(&nEndTime);
+		time=(double)((nEndTime.QuadPart-nBeginTime.QuadPart)/(double)nFreq.QuadPart)*1000;
+		cls();
+		printf("Total time:%14fms\n",time);
+		printf("Quantity:%16d\n",loopQuantity);
+		time = (time*1000*1000)/loopQuantity;
+		printf("One time:%16fns\n",time);
+		printf("Different:%6d\n",(count_Alloc-count_Free));
+		printf("Error    :%6d\n",count_Error);
+		float usin = FFB_POOL_API.GetUseCount(PoolID);
+		usin = (usin / FFB_POOL_API.GetTotalCount(PoolID))*100;
+		printf("Using    :%4f%%\n", usin);
+		FFB_DEBUG_ValueShow(PoolID, false);
+		//system("pause");
+	}
+}
+
+
 

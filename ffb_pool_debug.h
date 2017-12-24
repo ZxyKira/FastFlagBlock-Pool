@@ -6,7 +6,7 @@
 #define printu()			printf("---------------------------------\n")
 #define pdbg(value)		printf("%d\n", value);system("pause")
 
-extern void MGMGR_DebugInit(void* addr);
-extern void MGMGR_ValueShow(void);
+extern void FFB_DEBUG_ValueShow(FFB_Pool_ID PoolID ,bool ShowFlag);
+extern void FFB_DEBUG_LoopTest(FFB_Pool_ID PoolID, uint32_t loopQuantity, uint32_t blockCount);
 
 #endif
