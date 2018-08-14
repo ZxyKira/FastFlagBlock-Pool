@@ -44,6 +44,7 @@ static void cls(void){
  * Public functions
  ****************************************************************************/
 void FFB_DEBUG_ValueShow(FFB_Pool_ID PoolID ,bool ShowFlag){
+	ShowFlag=true;
 	ffb_info_t *info_debug = (ffb_info_t*)PoolID;
 	printf("\n");
 	printu();
@@ -97,8 +98,6 @@ void FFB_DEBUG_ValueShow(FFB_Pool_ID PoolID ,bool ShowFlag){
 	printu();
 } 
 
-
-
 void FFB_DEBUG_LoopTest(FFB_Pool_ID PoolID, uint32_t loopQuantity, uint32_t blockCount){
 //system("mode con cols=130 lines=55");
 	system("mode con cols=60 lines=30");
@@ -109,11 +108,11 @@ void FFB_DEBUG_LoopTest(FFB_Pool_ID PoolID, uint32_t loopQuantity, uint32_t bloc
 
 	
 	
-	uint16_t randomMax = FFB_POOL_API.GetFreeCount(PoolID);
+	uint16_t randomMax = FFB_POOL_API.getFreeCount(PoolID);
 	LARGE_INTEGER nFreq;
-  LARGE_INTEGER nBeginTime;
-  LARGE_INTEGER nEndTime;
-  double time;
+	LARGE_INTEGER nBeginTime;
+	LARGE_INTEGER nEndTime;
+	double time;
 
 	/*
 	for(int x=0; x<(randomMax*0.2); x++){
@@ -143,12 +142,12 @@ void FFB_DEBUG_LoopTest(FFB_Pool_ID PoolID, uint32_t loopQuantity, uint32_t bloc
 		 
 		for(int x=0; x<loopQuantity; x++){
 			if(ptr[randomNumb[x]] == 0){ 
-				ptr[randomNumb[x]] = FFB_POOL_API.Alloc(PoolID);
+				ptr[randomNumb[x]] = FFB_POOL_API.alloc(PoolID);
 				(ptr[randomNumb[x]] != 0)?count_Alloc+=1:count_Error+=1;
 				
 			}
 			else{
-				FFB_POOL_API.Free(PoolID, ptr[randomNumb[x]]);
+				FFB_POOL_API.free(PoolID, ptr[randomNumb[x]]);
 				ptr[randomNumb[x]] = 0;
 				count_Free+=1;
 			}
@@ -163,8 +162,8 @@ void FFB_DEBUG_LoopTest(FFB_Pool_ID PoolID, uint32_t loopQuantity, uint32_t bloc
 		printf("One time:%16fns\n",time);
 		printf("Different:%6d\n",(count_Alloc-count_Free));
 		printf("Error    :%6d\n",count_Error);
-		float usin = FFB_POOL_API.GetUseCount(PoolID);
-		usin = (usin / FFB_POOL_API.GetTotalCount(PoolID))*100;
+		float usin = FFB_POOL_API.getUseCount(PoolID);
+		usin = (usin / FFB_POOL_API.getTotalCount(PoolID))*100;
 		printf("Using    :%4f%%\n", usin);
 		FFB_DEBUG_ValueShow(PoolID, false);
 		//system("pause");

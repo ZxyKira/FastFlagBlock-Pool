@@ -8,8 +8,7 @@
 #include "ffb_pool.h" 
 #include "ffb_pool_API.h"
 #include "string.h"
-#include "stdio.h"
-#include "stdlib.h"
+#include "stdbool.h"
 
 #define FFB_POOL_FoolproofEnable 0
 
@@ -37,8 +36,8 @@
 
 #define FFB_POOL_SetFlag(ffb_pool_info, blockNum, flagNum, enable)				\
 (enable)?																																	\
-ffb_pool_info->Block.pFlagBlock[blockNum] |=  (1<<flagNum):								\
-ffb_pool_info->Block.pFlagBlock[blockNum] &= ~(1<<flagNum)								
+(ffb_pool_info->Block.pFlagBlock[blockNum] |=  (1<<flagNum)):								\
+(ffb_pool_info->Block.pFlagBlock[blockNum] &= ~(1<<flagNum))								
 
 #define FFB_POOL_GetPoolBlockAddr(ffb_pool_info, value) (void*)((uint32_t)ffb_pool_info + (ffb_pool_info->Block.size*value))
 
@@ -73,7 +72,7 @@ else{																																																\
 /*----------------------------------------------------------------------------
    FFB_POOL_Reload
 *----------------------------------------------------------------------------*/
-FFB_Pool_ID FFB_POOL_Reload(void *pBuffer){
+static FFB_Pool_ID FFB_POOL_Reload(void *pBuffer){
 	ffb_info_t *pTmp = (ffb_info_t*)pBuffer;
 	
 	if(pTmp->Buffer.pStartPoint == pBuffer){
@@ -86,7 +85,7 @@ FFB_Pool_ID FFB_POOL_Reload(void *pBuffer){
 /*----------------------------------------------------------------------------
    FFB_POOL_Init
 *----------------------------------------------------------------------------*/
-FFB_Pool_ID FFB_POOL_Init(void *pBuffer,	uint32_t bufferSize,	uint32_t blockSize){
+static FFB_Pool_ID FFB_POOL_Init(void *pBuffer,	uint32_t bufferSize,	uint32_t blockSize){
 	int32_t temp, cnt;
 	ffb_info_t *info = (ffb_info_t*)pBuffer;
 	
@@ -102,12 +101,13 @@ FFB_Pool_ID FFB_POOL_Init(void *pBuffer,	uint32_t bufferSize,	uint32_t blockSize
 	info->Block.Count.flagStart = ((sizeof(ffb_info_t) + info->Block.Count.blockTotal + blockSize - 1) / blockSize);	
 	info->Block.Count.lastFlag.value = 0;
 	memset(info->Block.pFlagBlock, 0x00, info->Block.Count.blockTotal);
-	
+
 	for(cnt = 0; cnt < info->Block.Count.flagStart; cnt++){
 		uint16_t cntA = (cnt/8);
 		uint16_t cntB = (cnt%8);
-		FFB_POOL_SetFlag(info, info->Block.pFlagBlock[cntA], cntB, true);
+		FFB_POOL_SetFlag(info, cntA, cntB, true);
 	}
+
 	info->Block.Count.flagUse = info->Block.Count.flagStart;
 	info->Block.Count.flagCount.value = (info->Block.Count.flagStart - 1);
 		
@@ -139,7 +139,7 @@ FFB_Pool_ID FFB_POOL_Init(void *pBuffer,	uint32_t bufferSize,	uint32_t blockSize
 /*----------------------------------------------------------------------------
    FFB_POOL_GetUseCount
 *----------------------------------------------------------------------------*/
-uint16_t FFB_POOL_GetUseCount(FFB_Pool_ID poolID){
+static uint16_t FFB_POOL_GetUseCount(FFB_Pool_ID poolID){
 	FFB_POOL_Foolproof(0);
 	return ((ffb_info_t*)poolID)->Block.Count.flagUse;
 }
@@ -147,7 +147,7 @@ uint16_t FFB_POOL_GetUseCount(FFB_Pool_ID poolID){
 /*----------------------------------------------------------------------------
    FFB_POOL_GetFreeCount
 *----------------------------------------------------------------------------*/
-uint16_t FFB_POOL_GetFreeCount(FFB_Pool_ID poolID){
+static uint16_t FFB_POOL_GetFreeCount(FFB_Pool_ID poolID){
 	FFB_POOL_Foolproof(0);
 	return (((ffb_info_t*)poolID)->Block.Count.flagTotal.value - 
 					((ffb_info_t*)poolID)->Block.Count.flagUse);
@@ -156,7 +156,7 @@ uint16_t FFB_POOL_GetFreeCount(FFB_Pool_ID poolID){
 /*----------------------------------------------------------------------------
    FFB_POOL_GetTotalCount
 *----------------------------------------------------------------------------*/
-uint16_t FFB_POOL_GetTotalCount(FFB_Pool_ID poolID){
+static uint16_t FFB_POOL_GetTotalCount(FFB_Pool_ID poolID){
 	FFB_POOL_Foolproof(0);
 	return ((ffb_info_t*)poolID)->Block.Count.flagTotal.value;
 }
@@ -164,7 +164,7 @@ uint16_t FFB_POOL_GetTotalCount(FFB_Pool_ID poolID){
 /*----------------------------------------------------------------------------
    FFB_POOL_Alloc
 *----------------------------------------------------------------------------*/
-void* FFB_POOL_Alloc(FFB_Pool_ID poolID){
+static void* FFB_POOL_Alloc(FFB_Pool_ID poolID){
 	ffb_info_t *info = (ffb_info_t*)poolID;
 	void* result;
 	int i, cnt;
@@ -172,10 +172,14 @@ void* FFB_POOL_Alloc(FFB_Pool_ID poolID){
 	
 	if(!FFB_POOL_GetMutex(info))
 		return 0;
+		
 	FFB_POOL_SetMutex(info, true);
 	
-	if(info->Block.Count.flagUse == info->Block.Count.flagTotal.value) 
+	if(info->Block.Count.flagUse == info->Block.Count.flagTotal.value) {
+		FFB_POOL_SetMutex(info, false);
 		return 0;
+	}
+		
 	
 		
 	//If Last free flag is not empty.
@@ -236,7 +240,7 @@ void* FFB_POOL_Alloc(FFB_Pool_ID poolID){
 /*----------------------------------------------------------------------------
    FFB_POOL_Free
 *----------------------------------------------------------------------------*/
-ffbStatus FFB_POOL_Free(FFB_Pool_ID poolID, void* addr){
+static ffbStatus FFB_POOL_Free(FFB_Pool_ID poolID, void* addr){
 	ffb_info_t *info = (ffb_info_t*)poolID;
 	FFB_POOL_Foolproof(ffbError);
 	
@@ -266,14 +270,14 @@ ffbStatus FFB_POOL_Free(FFB_Pool_ID poolID, void* addr){
 /*----------------------------------------------------------------------------
    FFB_POOL_API
 *----------------------------------------------------------------------------*/
-FFB_POOL_API_T FFB_POOL_API = {
-	.Reload						=	FFB_POOL_Reload,
-	.Init							=	FFB_POOL_Init,
-	.GetUseCount			=	FFB_POOL_GetUseCount,
-	.GetFreeCount			=	FFB_POOL_GetFreeCount,
-	.GetTotalCount		=	FFB_POOL_GetTotalCount,
-	.Alloc						=	FFB_POOL_Alloc,
-	.Free							=	FFB_POOL_Free
+const FFB_POOL_API_T FFB_POOL_API = {
+	.reload						=	FFB_POOL_Reload,
+	.init							=	FFB_POOL_Init,
+	.getUseCount			=	FFB_POOL_GetUseCount,
+	.getFreeCount			=	FFB_POOL_GetFreeCount,
+	.getTotalCount		=	FFB_POOL_GetTotalCount,
+	.alloc						=	FFB_POOL_Alloc,
+	.free							=	FFB_POOL_Free
 };
 
 /*****************************************************************************

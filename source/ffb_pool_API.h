@@ -22,16 +22,16 @@ typedef enum{
 }ffbStatus;
 
 typedef struct{
-	FFB_Pool_ID	(*Reload)(void *pBuffer);
-	FFB_Pool_ID	(*Init)(void *pBuffer,	uint32_t bufferSize,	uint32_t blockSize);
-	uint16_t		(*GetUseCount)(FFB_Pool_ID poolID);
-	uint16_t		(*GetFreeCount)(FFB_Pool_ID poolID);
-	uint16_t		(*GetTotalCount)(FFB_Pool_ID poolID);
-	void* 			(*Alloc)(FFB_Pool_ID poolID);
-	ffbStatus 	(*Free)(FFB_Pool_ID poolID, void* addr);
+	FFB_Pool_ID	(*reload)(void *pBuffer);
+	FFB_Pool_ID	(*init)(void *pBuffer,	uint32_t bufferSize,	uint32_t blockSize);
+	uint16_t		(*getUseCount)(FFB_Pool_ID poolID);
+	uint16_t		(*getFreeCount)(FFB_Pool_ID poolID);
+	uint16_t		(*getTotalCount)(FFB_Pool_ID poolID);
+	void* 			(*alloc)(FFB_Pool_ID poolID);
+	ffbStatus 	(*free)(FFB_Pool_ID poolID, void* addr);
 }FFB_POOL_API_T;
 
-extern FFB_POOL_API_T FFB_POOL_API;
+extern const FFB_POOL_API_T FFB_POOL_API;
 
 #endif 
 /*****************************************************************************
