@@ -1,9 +1,0 @@
-Dependencies for Project 'FastFlagBlock-Pool', Target 'Cortex_M3': (DO NOT MODIFY !)
-F (.\source\ffb_pool.c)(0x5B72F005)(--c99 --gnu -c --cpu Cortex-M3 -D__EVAL --li -g -O0 --apcs=interwork --split_sections -I .\source-I.\RTE\_Cortex_M3-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.4.0\Device\ARM\ARMCM3\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DARMCM3-o .\objects\ffb_pool.o --omf_browse .\objects\ffb_pool.crf --depend .\objects\ffb_pool.d)
-I (source\ffb_pool.h)(0x5B49717A)
-I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
-I (source\ffb_pool_API.h)(0x5B72E03B)
-I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x599ECD2C)
-I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x599ECD2E)
-F (.\source\ffb_pool.h)(0x5B49717A)()
-F (.\source\ffb_pool_API.h)(0x5B72E03B)()

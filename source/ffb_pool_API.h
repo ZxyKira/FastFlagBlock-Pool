@@ -14,11 +14,11 @@ typedef void* FastFlagBlock_Pool_ID;
 #define FFB_Pool_ID FastFlagBlock_Pool_ID
 
 typedef enum{
-	ffbOK,
+	ffbOK=0x0,
 	ffbReload,
 	ffbAddrError,
 	ffbMutex,
-	ffbError
+	ffbError=0xFF
 }ffbStatus;
 
 typedef struct{

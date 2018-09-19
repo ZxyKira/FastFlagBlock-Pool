@@ -7,7 +7,7 @@
  *****************************************************************************/
 #include "ffb_pool.h" 
 #include "ffb_pool_API.h"
-#include "string.h"
+//#include "string.h"
 #include "stdbool.h"
 
 #define FFB_POOL_FoolproofEnable 0
@@ -21,7 +21,16 @@
 /*****************************************************************************
  * Private types/enumerations/variables
  ****************************************************************************/
+static void *FFB_Memset(void *dst, int c, uint32_t n){
+    if (n) {
+        char *d = dst;
 
+        do {
+            *d++ = c;
+        } while (--n);
+    }
+    return dst;
+}
 /*****************************************************************************
  * Public types/enumerations/variables
  ****************************************************************************/
@@ -89,7 +98,7 @@ static FFB_Pool_ID FFB_POOL_Init(void *pBuffer,	uint32_t bufferSize,	uint32_t bl
 	int32_t temp, cnt;
 	ffb_info_t *info = (ffb_info_t*)pBuffer;
 	
-	memset(pBuffer, 0x00, sizeof(ffb_info_t));
+	FFB_Memset(pBuffer, 0x00, sizeof(ffb_info_t));
 	info->Buffer.pStartPoint	= pBuffer;
 	info->Buffer.size					=	bufferSize;
 	info->Block.size					= blockSize;
@@ -100,7 +109,7 @@ static FFB_Pool_ID FFB_POOL_Init(void *pBuffer,	uint32_t bufferSize,	uint32_t bl
 	info->Block.Count.blockTotal = ((info->Block.Count.flagTotal.value + 7) / 8);
 	info->Block.Count.flagStart = ((sizeof(ffb_info_t) + info->Block.Count.blockTotal + blockSize - 1) / blockSize);	
 	info->Block.Count.lastFlag.value = 0;
-	memset(info->Block.pFlagBlock, 0x00, info->Block.Count.blockTotal);
+	FFB_Memset(info->Block.pFlagBlock, 0x00, info->Block.Count.blockTotal);
 
 	for(cnt = 0; cnt < info->Block.Count.flagStart; cnt++){
 		uint16_t cntA = (cnt/8);

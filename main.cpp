@@ -16,19 +16,43 @@ uint8_t testSrc[blockSize];
 void* ptr[blockQuantity];
 int cnt, cntB;
 
+uint8_t poolBuffer[8192];
 
-int main(int argc, char** argv) {
-	for(cnt=0; cnt<(blockSize * blockSize); cnt++){
-		testSrc[cnt]=cnt;
+void thread_A(void){
+	FFB_Pool_ID PoolID;
+	PoolID = FFB_POOL_API.init(&poolBuffer[0], sizeof(poolBuffer), 64);
+	
+	void* pSpace = FFB_POOL_API.alloc(PoolID);
+
+	if(pSpace==0x0){
+		//memory alloc fail, pool full or mutex lock
+		while(1);
 	}
 	
-	for(cnt=0; cnt<(blockSize * blockSize); cnt++)
-		printf("0x%02X ",testSrc[cnt]);
+	memset(pSpace, 0xFF, 64);
+	
+	ffbStatus result = FFB_POOL_API.free(PoolID, pSpace);
+	
+	if(result!=ffbOK){
+		//memory free fail, pool mutex lock
+		while(1);
+	}
+	
+	return;
+}
+
+
+int main(int argc, char** argv) {
 	
 	/* Declarations memory pool ID */
 	FFB_Pool_ID PoolID;
 	PoolID = FFB_POOL_API.init(&buf, sizeof(buf), blockSize);
-	
+
+	return 0;
+}
+
+
+/*
 	for(cnt=0; cnt<(blockQuantity * blockSize); cnt++){
 		if((cnt!=0)&&(cnt%16==0))
 			printf("\n--------------------------------------------------------------------------\n");
@@ -85,6 +109,5 @@ int main(int argc, char** argv) {
 	}	
 	
 	//FFB_DEBUG_LoopTest(PoolID, 500000, blockQuantity);
-	return 0;
-}
+*/
 
