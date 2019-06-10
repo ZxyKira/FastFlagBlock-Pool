@@ -358,7 +358,7 @@ ASALocalRun/
 *.a
 *.win
 *.layout
-*.danny
+*.uvguix.danny
 
 # Executables
 *.exe
