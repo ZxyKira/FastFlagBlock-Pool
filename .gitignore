@@ -356,7 +356,9 @@ ASALocalRun/
 *.lai
 *.la
 *.a
-*.lib
+*.win
+*.layout
+*.danny
 
 # Executables
 *.exe
@@ -365,4 +367,3 @@ ASALocalRun/
 *.win
 *.uvguix.*
 /Debug
-/Output
