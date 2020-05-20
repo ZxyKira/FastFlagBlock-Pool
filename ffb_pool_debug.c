@@ -80,20 +80,7 @@ void FFB_DEBUG_ValueShow(FFB_Pool_ID PoolID ,bool ShowFlag){
 	printv(info_debug->Block.Count.lastFlag.S.flag);
 	printf("Block.Count.lastFlag.S.block  =");
 	printv(info_debug->Block.Count.lastFlag.S.block);
-	
-	if(ShowFlag){
-		int forMax = ((info_debug->Block.Count.blockTotal+3) / 4);
-		for(int i=0; i<forMax ; i++){
-			char tmp[16];
-			for(int j=0; j<4; j++){
-				if((forMax*j)+i<info_debug->Block.Count.blockTotal){
-					itoa(info_debug->Block.pFlagBlock[(forMax*j)+i], tmp, 2);
-					printf("FlagBlock[%02d] = %08s\t",(forMax*j)+i ,tmp);	
-				}
-			}
-			printf("\n");
-		}			
-	}
+
 
 	printu();
 } 

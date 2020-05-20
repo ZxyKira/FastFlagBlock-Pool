@@ -6,7 +6,7 @@
 
 
 #define blockSize 8
-#define blockQuantity 0x18
+#define blockQuantity 0x100
 
 
 
@@ -47,12 +47,7 @@ int main(int argc, char** argv) {
 	/* Declarations memory pool ID */
 	FFB_Pool_ID PoolID;
 	PoolID = FFB_POOL_API.init(&buf, sizeof(buf), blockSize);
-
-	return 0;
-}
-
-
-/*
+	/*
 	for(cnt=0; cnt<(blockQuantity * blockSize); cnt++){
 		if((cnt!=0)&&(cnt%16==0))
 			printf("\n--------------------------------------------------------------------------\n");
@@ -106,8 +101,14 @@ int main(int argc, char** argv) {
 		printf("\n");
 		system("pause");
 		system("cls");
-	}	
+	}	*/
 	
-	//FFB_DEBUG_LoopTest(PoolID, 500000, blockQuantity);
+	FFB_DEBUG_LoopTest(PoolID, 500000, blockQuantity);
+	return 0;
+}
+
+
+/*
+
 */
 

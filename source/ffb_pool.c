@@ -23,7 +23,7 @@
  ****************************************************************************/
 static void *FFB_Memset(void *dst, int c, uint32_t n){
     if (n) {
-        char *d = dst;
+        char *d = (char*)dst;
 
         do {
             *d++ = c;
