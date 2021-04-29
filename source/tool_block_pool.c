@@ -127,11 +127,11 @@ else{                                                                           
 /*----------------------------------------
  *  tool_block_reload
  *----------------------------------------*/
-tool_block_pool_id tool_block_reload(void *pBuffer){
+tool_block_pool_id_t tool_block_reload(void *pBuffer){
   tool_block_pool_handle_t *pTmp = (tool_block_pool_handle_t*)pBuffer;
   
   if(pTmp->buffer.startPoint == pBuffer){
-    return (tool_block_pool_id)pBuffer;
+    return (tool_block_pool_id_t)pBuffer;
   }
   else
     return (void*)0x00000000;
@@ -142,7 +142,7 @@ tool_block_pool_id tool_block_reload(void *pBuffer){
 /*----------------------------------------
  *  tool_block_init
  *----------------------------------------*/
-tool_block_pool_id tool_block_init(void *pBuffer,  uint32_t bufferSize,  uint32_t blockSize){
+tool_block_pool_id_t tool_block_init(void *pBuffer,  uint32_t bufferSize,  uint32_t blockSize){
   int32_t temp, cnt;
   tool_block_pool_handle_t *info = (tool_block_pool_handle_t*)pBuffer;
   
@@ -190,7 +190,7 @@ tool_block_pool_id tool_block_init(void *pBuffer,  uint32_t bufferSize,  uint32_
     }
   }
   
-  return (tool_block_pool_id)pBuffer;
+  return (tool_block_pool_id_t)pBuffer;
 }
 
 
@@ -198,7 +198,7 @@ tool_block_pool_id tool_block_init(void *pBuffer,  uint32_t bufferSize,  uint32_
 /*----------------------------------------
  *  tool_block_getUsedCount
  *----------------------------------------*/
-uint16_t tool_block_getUsedCount(tool_block_pool_id poolID){
+uint16_t tool_block_getUsedCount(tool_block_pool_id_t poolID){
   return ((tool_block_pool_handle_t*)poolID)->block.count.flagUse;
 }
 
@@ -207,7 +207,7 @@ uint16_t tool_block_getUsedCount(tool_block_pool_id poolID){
 /*----------------------------------------
  *  tool_block_getFreeCount
  *----------------------------------------*/
-uint16_t tool_block_getFreeCount(tool_block_pool_id poolID){
+uint16_t tool_block_getFreeCount(tool_block_pool_id_t poolID){
   return (((tool_block_pool_handle_t*)poolID)->block.count.flagTotal.value - 
           ((tool_block_pool_handle_t*)poolID)->block.count.flagUse);
 }
@@ -217,7 +217,7 @@ uint16_t tool_block_getFreeCount(tool_block_pool_id poolID){
 /*----------------------------------------
  *  tool_block_getFreeCount
  *----------------------------------------*/
-uint16_t tool_block_getTotalCount(tool_block_pool_id poolID){
+uint16_t tool_block_getTotalCount(tool_block_pool_id_t poolID){
   return ((tool_block_pool_handle_t*)poolID)->block.count.flagTotal.value;
 }
 
@@ -226,7 +226,7 @@ uint16_t tool_block_getTotalCount(tool_block_pool_id poolID){
 /*----------------------------------------
  *  tool_block_getFreeCount
  *----------------------------------------*/
-static void* tool_block_alloc(tool_block_pool_id poolID){
+static void* tool_block_alloc(tool_block_pool_id_t poolID){
   tool_block_pool_handle_t *info = (tool_block_pool_handle_t*)poolID;
   void* result;
   int i, cnt;
@@ -304,7 +304,7 @@ static void* tool_block_alloc(tool_block_pool_id poolID){
 /*----------------------------------------
  *  tool_block_free
  *----------------------------------------*/
-bool tool_block_free(tool_block_pool_id poolID, void* addr){
+bool tool_block_free(tool_block_pool_id_t poolID, void* addr){
   tool_block_pool_handle_t *info = (tool_block_pool_handle_t*)poolID;
   
   if(!GET_MUTEX(info))
