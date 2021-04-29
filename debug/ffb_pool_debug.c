@@ -5,8 +5,8 @@
  *			Modufy Date	:
  *			Information :
  *****************************************************************************/
-#include "ffb_pool.h" 
-#include "ffb_pool_API.h"
+
+#include "tool_block_pool.h"
 #include "string.h"
 #include "stdio.h"
 #include "stdlib.h"
@@ -17,8 +17,10 @@
 #include <Mmsystem.h>
 
 
+#define ffb_info_t
 
-
+#define ffb_info_t tool_block_pool_info_t 
+#define FFB_POOL_API tool_block_pool_api
 
 /*****************************************************************************
  * Private functions
@@ -53,33 +55,33 @@ void FFB_DEBUG_ValueShow(FFB_Pool_ID PoolID ,bool ShowFlag){
 	printf("mod                           =");
 	printv(info_debug->mod);
 	printf("Buffer.pStartPoint            =");
-	printx(info_debug->Buffer.pStartPoint);
+	printx(info_debug->buffer.startPoint);
 	printf("Buffer.size                   =");
-	printv(info_debug->Buffer.size);
+	printv(info_debug->buffer.size);
 	printf("Block.pFlagBlock              =");
-	printx(info_debug->Block.pFlagBlock);
+	printx(info_debug->block.flagBlock);
 	printf("Block.size                    =");
-	printv(info_debug->Block.size);
-	printf("Block.Count.blockTotal        =");
-	printv(info_debug->Block.Count.blockTotal);
-	printf("Block.Count.flagTotal         =");
-	printv(info_debug->Block.Count.flagTotal);
-	printf("Block.Count.flagUse           =");
-	printv(info_debug->Block.Count.flagUse);
-	printf("Block.Count.flagStart         =");
-	printv(info_debug->Block.Count.flagStart);
-	printf("Block.Count.flagCount.value   =");
-	printv(info_debug->Block.Count.flagCount.value);
-	printf("Block.Count.flagCount.S.flag  =");
-	printv(info_debug->Block.Count.flagCount.S.flag);
-	printf("Block.Count.flagCount.S.block =");
-	printv(info_debug->Block.Count.flagCount.S.block);
-	printf("Block.Count.lastFlag.value    =");
-	printv(info_debug->Block.Count.lastFlag.value);
-	printf("Block.Count.lastFlag.S.flag   =");
-	printv(info_debug->Block.Count.lastFlag.S.flag);
-	printf("Block.Count.lastFlag.S.block  =");
-	printv(info_debug->Block.Count.lastFlag.S.block);
+	printv(info_debug->block.size);
+	printf("Block.count.blockTotal        =");
+	printv(info_debug->block.count.blockTotal);
+	printf("Block.count.flagTotal         =");
+	printv(info_debug->block.count.flagTotal);
+	printf("Block.count.flagUse           =");
+	printv(info_debug->block.count.flagUse);
+	printf("Block.count.flagStart         =");
+	printv(info_debug->block.count.flagStart);
+	printf("Block.count.flagCount.value   =");
+	printv(info_debug->block.count.flagCount.value);
+	printf("Block.count.flagCount.s.flag  =");
+	printv(info_debug->block.count.flagCount.s.flag);
+	printf("Block.count.flagCount.s.block =");
+	printv(info_debug->block.count.flagCount.s.block);
+	printf("Block.count.lastFlag.value    =");
+	printv(info_debug->block.count.lastFlag.value);
+	printf("Block.count.lastFlag.s.flag   =");
+	printv(info_debug->block.count.lastFlag.s.flag);
+	printf("Block.count.lastFlag.s.block  =");
+	printv(info_debug->block.count.lastFlag.s.block);
 
 
 	printu();
@@ -149,7 +151,7 @@ void FFB_DEBUG_LoopTest(FFB_Pool_ID PoolID, uint32_t loopQuantity, uint32_t bloc
 		printf("One time:%16fns\n",time);
 		printf("Different:%6d\n",(count_Alloc-count_Free));
 		printf("Error    :%6d\n",count_Error);
-		float usin = FFB_POOL_API.getUseCount(PoolID);
+		float usin = FFB_POOL_API.getUsedCount(PoolID);
 		usin = (usin / FFB_POOL_API.getTotalCount(PoolID))*100;
 		printf("Using    :%4f%%\n", usin);
 		FFB_DEBUG_ValueShow(PoolID, false);

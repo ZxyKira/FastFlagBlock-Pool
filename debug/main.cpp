@@ -1,6 +1,6 @@
 #include "stdio.h"
 #include "stdlib.h"
-#include "ffb_pool_API.h"
+#include "tool_block_pool.h"
 #include "ffb_pool_debug.h"
 #include "string.h"
 
@@ -8,7 +8,7 @@
 #define blockSize 8
 #define blockQuantity 0x100
 
-
+#define FFB_POOL_API tool_block_pool_api
 
 static uint8_t	buf[blockQuantity * blockSize];
 
@@ -31,9 +31,9 @@ void thread_A(void){
 	
 	memset(pSpace, 0xFF, 64);
 	
-	ffbStatus result = FFB_POOL_API.free(PoolID, pSpace);
+	bool result = FFB_POOL_API.free(PoolID, pSpace);
 	
-	if(result!=ffbOK){
+	if(!result){
 		//memory free fail, pool mutex lock
 		while(1);
 	}

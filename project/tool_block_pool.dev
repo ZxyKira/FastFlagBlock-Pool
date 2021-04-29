@@ -1,10 +1,10 @@
 [Project]
-FileName=FFB_Pool.dev
-Name=FastFlagBlock_Pool
+FileName=tool_block_pool.dev
+Name=tool_block_pool
 Type=1
 Ver=2
 ObjFiles=
-Includes=.\source
+Includes=..\import;..\include;..\source;..\debug
 Libs=
 PrivateResource=
 ResourceIncludes=
@@ -19,17 +19,17 @@ ObjectOutput=Output
 LogOutput=
 LogOutputEnabled=0
 OverrideOutput=0
-OverrideOutputName=FFB_Pool.exe
+OverrideOutputName=tool_block_pool.exe
 HostApplication=
 UseCustomMakefile=0
 CustomMakefile=
 CommandLine=
-Folders=Source
+Folders=
 IncludeVersionInfo=0
 SupportXPThemes=0
 CompilerSet=3
 CompilerSettings=0000000100000000001000000
-UnitCount=6
+UnitCount=3
 
 [VersionInfo]
 Major=1
@@ -51,7 +51,7 @@ AutoIncBuildNr=0
 SyncProduct=1
 
 [Unit1]
-FileName=main.cpp
+FileName=..\source\tool_block_pool.c
 CompileCpp=1
 Folder=
 Compile=1
@@ -61,7 +61,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit2]
-FileName=ffb_pool_debug.c
+FileName=..\debug\ffb_pool_debug.c
 CompileCpp=1
 Folder=
 Compile=1
@@ -71,7 +71,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit3]
-FileName=ffb_pool_debug.h
+FileName=..\debug\main.cpp
 CompileCpp=1
 Folder=
 Compile=1
