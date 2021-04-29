@@ -226,7 +226,7 @@ uint16_t tool_block_getTotalCount(tool_block_pool_id_t poolID){
 /*----------------------------------------
  *  tool_block_getFreeCount
  *----------------------------------------*/
-static void* tool_block_alloc(tool_block_pool_id_t poolID){
+void* tool_block_alloc(tool_block_pool_id_t poolID){
   tool_block_pool_handle_t *info = (tool_block_pool_handle_t*)poolID;
   void* result;
   int i, cnt;
