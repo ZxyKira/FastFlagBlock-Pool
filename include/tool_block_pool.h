@@ -52,11 +52,11 @@ typedef struct tool_block_pool_handle_t* tool_block_pool_id_t;
 struct tool_block_pool_api_t{
   tool_block_pool_id_t    (*reload)        (void *pBuffer);
   tool_block_pool_id_t    (*init)          (void *pBuffer, uint32_t bufferSize, uint32_t blockSize);
-  uint16_t              (*getUsedCount)  (tool_block_pool_id_t poolID);
-  uint16_t              (*getFreeCount)  (tool_block_pool_id_t poolID);
-  uint16_t              (*getTotalCount) (tool_block_pool_id_t poolID);
-  void*                 (*alloc)         (tool_block_pool_id_t poolID);
-  bool                  (*free)          (tool_block_pool_id_t poolID, void* addr);
+  uint16_t                (*getUsedCount)  (tool_block_pool_id_t poolID);
+  uint16_t                (*getFreeCount)  (tool_block_pool_id_t poolID);
+  uint16_t                (*getTotalCount) (tool_block_pool_id_t poolID);
+  void*                   (*alloc)         (tool_block_pool_id_t poolID);
+  bool                    (*free)          (tool_block_pool_id_t poolID, void* addr);
 };
 
 
