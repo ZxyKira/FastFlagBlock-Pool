@@ -50,13 +50,13 @@ typedef struct tool_block_pool_handle_t* tool_block_pool_id_t;
  *  tool_block_pool_api_t
  *----------------------------------------*/
 struct tool_block_pool_api_t{
-	tool_block_pool_id_t	  (*reload)        (void *pBuffer);
-	tool_block_pool_id_t	  (*init)          (void *pBuffer, uint32_t bufferSize, uint32_t blockSize);
-	uint16_t		          (*getUsedCount)  (tool_block_pool_id_t poolID);
-	uint16_t		          (*getFreeCount)  (tool_block_pool_id_t poolID);
-	uint16_t		          (*getTotalCount) (tool_block_pool_id_t poolID);
-	void* 			          (*alloc)         (tool_block_pool_id_t poolID);
-	bool      	          (*free)          (tool_block_pool_id_t poolID, void* addr);
+  tool_block_pool_id_t    (*reload)        (void *pBuffer);
+  tool_block_pool_id_t    (*init)          (void *pBuffer, uint32_t bufferSize, uint32_t blockSize);
+  uint16_t                (*getUsedCount)  (tool_block_pool_id_t poolID);
+  uint16_t                (*getFreeCount)  (tool_block_pool_id_t poolID);
+  uint16_t                (*getTotalCount) (tool_block_pool_id_t poolID);
+  void*                   (*alloc)         (tool_block_pool_id_t poolID);
+  bool                    (*free)          (tool_block_pool_id_t poolID, void* addr);
 };
 
 
@@ -65,10 +65,10 @@ struct tool_block_pool_api_t{
  *  tool_block_pool_flag_t
  *----------------------------------------*/
 union tool_block_pool_flag_t{
-	uint16_t value;
-	struct{
-		uint16_t	flag  :3;
-	  uint16_t	block :13;
+  uint16_t value;
+  struct{
+    uint16_t  flag  :3;
+    uint16_t  block :13;
   }s;
 };
 
@@ -78,28 +78,28 @@ union tool_block_pool_flag_t{
  *  tool_block_pool_handle_t
  *----------------------------------------*/
 typedef struct{
-	uint16_t	isBusy;
-	uint16_t	mod;
-	
-	struct{
-		void			*startPoint;
-		uint32_t	size;
-	}buffer;
-	
-	struct{
-		uint32_t	size;
-		uint8_t		*flagBlock;
-		void			*startPoint;
-		
-		struct{
-			uint16_t	blockTotal;
-			uint16_t	flagUse;
-			uint16_t	flagStart;
-			union tool_block_pool_flag_t flagTotal;
-			union tool_block_pool_flag_t flagCount;
-			union tool_block_pool_flag_t lastFlag;
-		}count;
-	}block;
+  uint16_t  isBusy;
+  uint16_t  mod;
+  
+  struct{
+    void      *startPoint;
+    uint32_t  size;
+  }buffer;
+  
+  struct{
+    uint32_t  size;
+    uint8_t    *flagBlock;
+    void      *startPoint;
+    
+    struct{
+      uint16_t  blockTotal;
+      uint16_t  flagUse;
+      uint16_t  flagStart;
+      union tool_block_pool_flag_t flagTotal;
+      union tool_block_pool_flag_t flagCount;
+      union tool_block_pool_flag_t lastFlag;
+    }count;
+  }block;
 }tool_block_pool_handle_t;
 
 
@@ -116,7 +116,13 @@ typedef struct{
  */ 
 extern const struct tool_block_pool_api_t tool_block_pool_api;
 
-
+extern tool_block_pool_id_t tool_block_reload(void *pBuffer);
+extern tool_block_pool_id_t tool_block_init(void *pBuffer,  uint32_t bufferSize,  uint32_t blockSize);
+extern uint16_t tool_block_getUsedCount(tool_block_pool_id_t poolID);
+extern uint16_t tool_block_getFreeCount(tool_block_pool_id_t poolID);
+extern uint16_t tool_block_getTotalCount(tool_block_pool_id_t poolID);
+extern void* tool_block_alloc(tool_block_pool_id_t poolID);
+extern bool tool_block_free(tool_block_pool_id_t poolID, void* addr);
 
 #ifdef __cplusplus
 }
